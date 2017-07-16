@@ -1,8 +1,10 @@
 export const CSS = {
-  addButton: "l-header__button",
-  container: "l-main__container",
+  addButton: "c-add-button",
+
   block: {
+    container: "c-block__container",
     name: "c-block",
+    selected: "c-block--selected",
     text: "c-block__text", 
     button: "c-block__button"
   }

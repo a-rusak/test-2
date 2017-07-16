@@ -1,0 +1,33 @@
+.c-block {
+  margin: 0;
+  padding: 0.5em;
+  flex-basis: 300px;
+  position: relative;
+
+  &__text {
+    padding: 2em;
+    border: 1px solid fade(@brand-primary, 20%);
+
+    .c-block--selected & {
+      background-color: @brand-accent;
+      border-color: @brand-primary;
+      color: white;
+    }
+    .c-block:hover & {
+      border-color: @brand-primary;
+    }
+  }
+
+  &__button {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+  }
+
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+  }
+
+}

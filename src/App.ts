@@ -10,7 +10,7 @@ export default class App {
 
   constructor(propsObj: PropsValue) {
     this.test = propsObj.test;
-    console.log(this.test);
+    //console.log(this.test);
     this.controller = new Controller()
   }
 }

@@ -8,16 +8,29 @@ interface itemValue {
   isComplex: boolean;
 }
 
+interface DatasetEventTarget extends EventTarget {
+  dataset: {
+    id: string;
+  };
+  tagName: string;
+  classList: DOMTokenList;
+}
+
+interface DatasetEvent extends Event {
+  target: DatasetEventTarget;
+  getMessage(): string;
+}
+
 export default class View {
   private store: Store;
   private $btn: Element;
   private $container: Element;
 
   constructor(store: Store) {
-    console.log("View");
+    //console.log("View");
     this.store = store;
     this.$btn = $$(`.${CSS.addButton}`);
-    this.$container = $$(`.${CSS.container}`);
+    this.$container = $$(`.${CSS.block.container}`);
     //this.template = renderBox(item);
   }
 
@@ -33,14 +46,52 @@ export default class View {
     this.$container.removeChild(elem);
   }
 
+  clickHander(callback: (id: string, ACTION: string) => void, event: DatasetEvent) {
+    const target = event.target;
+    const id = target.dataset.id;
+    let ACTION: string = "";
+    //console.log(target);
+
+    if (!target || !id) return;
+    //event.cancelBubble = true;
+
+    if (target.classList.contains(CSS.block.button)) {
+      ACTION = "DELETE";
+    }
+    if (target.classList.contains(CSS.block.name) || target.classList.contains(CSS.block.text)) {
+      if (event.type === "dblclick") {
+        ACTION = "SWITCH";
+      } else {
+        ACTION = "SELECT";
+      }
+    }
+    callback(id, ACTION);
+  }
+
+  public toggleSelect(id: string, isSelected: boolean) {
+    const selector = `figure[data-id="${id}"], figcaption[data-id="${id}"]`
+    const elem = $$(selector, this.$container);
+    //console.log(elem)
+    elem && elem.classList && elem.classList.toggle(CSS.block.selected, isSelected)
+    /* const range = document.createRange();
+    range.selectNodeContents(referenceNode);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range); */
+    //console.log(id, range);
+  }
+
+
   public bindAddItem(callback: () => void) {
     $on(this.$btn, "click", callback);
   }
 
-  public bindListClickHandler(callback: () => void) {
-    //$on(this.$container, "click", this.getTarget.bind(this));
-    $on(this.$container, "click", callback);
-    //callback(id)
+  public bindListClickHandler(callback: (id: string, ACTION: string) => void) {
+    $on(this.$container, "click", this.clickHander.bind(this, callback));
+  }
+
+  public bindListDoubleClickHandler(callback: () => void) {
+    $on(this.$container, "dblclick", this.clickHander.bind(this, callback));
   }
 
   renderBox(item: itemValue) {
