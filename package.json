@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server",
     "prod": "cross-env NODE_ENV=production webpack -p --progress",
-    "lint": "eslint ./src/**/*.js",
+    "lint": "tslint ./src/**/*.ts",
     "preprod": "npm run lint",
     "server": "node server.js",
     "postprod": "npm run server"
@@ -23,8 +23,6 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
-    "eslint": "^4.2.0",
-    "eslint-plugin-smells": "^1.0.1",
     "express": "^4.15.3",
     "extract-text-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^2.29.0",
@@ -33,6 +31,7 @@
     "postcss-loader": "^2.0.6",
     "source-map-loader": "^0.2.1",
     "style-loader": "^0.18.2",
+    "tslint": "^5.5.0",
     "typescript": "^2.4.1",
     "uglify-js": "^3.0.24",
     "uglifyjs-webpack-plugin": "^0.4.6",

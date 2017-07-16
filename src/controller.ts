@@ -2,6 +2,8 @@ import Store from "./Store";
 import View from "./View";
 import { $$, $on } from "./helpers";
 import { CSS } from "./constants";
+import { DELETE, SWITCH, SELECT } from "./constants";
+import { ItemValue } from "./store";
 
 declare const PROD: boolean;
 
@@ -21,32 +23,32 @@ interface DatasetEvent extends Event {
 export default class Controller {
   private store: Store;
   private view: View;
-  //private event: Event;
 
   constructor() {
-    //!PROD && console.log("Controller");
     this.store = new Store();
     this.view = new View(this.store);
-    //this.event = new Event("build");
-    //$on(document.body, "build", this.store.update.bind(this));
-    this.view.bindAddItem(this.addItem.bind(this));
+    this.view.bindAddItem(this.addItem.bind(this, false));
+    this.view.bindAddComplexItem(this.addItem.bind(this, true));
     this.view.bindListClickHandler(this.listClickHandler.bind(this));
     this.view.bindListDoubleClickHandler(this.listClickHandler.bind(this));
-    //this.view.bindAddItem(this.clickHadler.bind(this))
+    this.getCount();
   }
 
-  /* private clickHadler() {
-    document.body.dispatchEvent(this.event);
-  } */
-  listClickHandler(id: string, ACTION: string) {
-    console.log("listClickHandler", id, ACTION);
-    switch (ACTION) {
-      case "DELETE":
-        this.removeItem(id);
+  //listClickHandler(id: string, ACTION: string) {
+  listClickHandler(id: string, Action: string) {
+    switch (Action) {
+      case DELETE:
+        this.removeItem(id, this.store.boxes[id].isComplex);
         break;
 
-      case "SELECT":
+      case SELECT:
         this.selectItem(id);
+        break;
+
+      case SWITCH:
+        if (this.store.boxes[id].isComplex) {
+          this.switchItem(id);
+        }
         break;
 
       default:
@@ -58,37 +60,57 @@ export default class Controller {
     const target = event.target;
     const id = target.dataset.id;
 
-    if (!target || !id || !target.classList.contains(CSS.block.name)) return;
-    //event.cancelBubble = true;
+    if (!target || !id || !target.classList.contains(CSS.block.name)) {
+      return;
+    }
   }
 
-  addItem() {
-    const item = {
-      id: Date.now(),
-      isComplex: false,
-      isSelected: false
-    };
-    this.store.insert(item, () => {
-      //this.view.clearNewTodo();
-      //this._filter(true);
+  addItem(isComplex: boolean) {
+    this.store.insert(isComplex, item => {
+      this.getCount();
       this.view.addItem(item);
     });
   }
 
-  removeItem(id: string) {
+  @confirmDelete
+  removeItem(id: string, isComplex: boolean) {
     this.store.remove(id, () => {
+      this.getCount();
       this.view.remove(id);
     });
   }
 
-  selectItem(id: string) {
-    //console.log("selectItem", id)
-    this.store.toggleSelect(id, () => {
-      this.view.toggleSelect(id, this.store.boxes[id].isSelected);
-    })
+  switchItem(id: string) {
+    this.store.switch(id, () => {
+      this.getCount();
+      this.view.switch(id);
+    });
   }
 
-  public remove() {
-    //this.view.removeHandler()
+  selectItem(id: string) {
+    this.store.toggleSelect(id, () => {
+      this.getCount();
+      this.view.toggleSelect(id, this.store.boxes[id].isSelected);
+    });
   }
+
+  getCount() {
+    this.store.count(counters => {
+      this.view.setCounters(counters);
+    });
+  }
+}
+
+function confirmDelete(target: Controller, key: string, value: any) {
+  return {
+    value: function(id: string, isComplex: boolean) {
+      let isApproved = true;
+      if (isComplex) {
+        isApproved = confirm("Are you sure?");
+      }
+      const result = isApproved ? value.value.call(this, id, isComplex) : null;
+
+      return result;
+    }
+  };
 }

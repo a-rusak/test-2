@@ -10,14 +10,30 @@
 
 <body class="l-body">
   <header class="l-body__header">
-    <h1 class="c-title">Test</h1>
-    <button class="c-add-button" id="btn">+</button>
+    <section class="c-header">
+      <h1 class="c-title">Test</h1>
+      <button class="c-add-button c-add-button--simple"><strong>+</strong> Добавить Простой блок</button>
+      <button class="c-add-button c-add-button--complex"><strong>+</strong> Добавить Сложный блок</button>
+    </section>
   </header>
   <main class="l-body__main">
     <section class="c-block__container"></section>
   </main>
   <footer class="l-body__footer">
-    © <a href="mailto:alexander.rusak@gmail.com">alexander.rusak@gmail.com</a>
+    <section class="c-counters">
+      <p>
+        Всего: <span id="counterTotal"></span>
+      </p>
+      <p>
+        Выбрано: <span id="counterTotalSelected"></span>
+      </p>
+      <p>
+        Выбрано красных: <span id="counterTotalSelectedRed"></span>
+      </p>
+      <p>
+        Выбрано зелёных: <span id="counterTotalSelectedGreen"></span>
+      </p>
+    </section>
   </footer>
 </body>
 

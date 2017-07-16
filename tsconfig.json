@@ -4,7 +4,8 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "esnext",
-    "target": "es5"
+    "target": "es5",
+    "experimentalDecorators": true
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]

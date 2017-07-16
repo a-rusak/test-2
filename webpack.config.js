@@ -3,9 +3,7 @@ const webpack = require("webpack");
 const HtmlPlugin = require("html-webpack-plugin");
 const CleanPlugin = require("clean-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 const WriteFilePlugin = require("write-file-webpack-plugin");
-const UglifyjsPlugin = require("uglifyjs-webpack-plugin");
 
 const PROD = process.env.NODE_ENV === "production";
 
@@ -77,9 +75,6 @@ module.exports = {
     new webpack.DefinePlugin({
       PROD: JSON.stringify(PROD)
     })
-    /* new CopyPlugin([{ from: "data.json", to: OUTPUT_PATH }], {
-      copyUnmodified: true
-    }) */
   ]
 };
 

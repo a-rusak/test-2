@@ -1,52 +1,85 @@
-interface itemValue {
+import { Color, RED, GREEN } from "./constants";
+
+export interface ItemValue {
   id: number;
   isComplex: boolean;
   isSelected: boolean;
+  state?: Color;
 }
 
-interface boxesValue {
+interface BoxesValue {
   [key: string]: {
     isComplex: boolean;
     isSelected: boolean;
+    state?: Color;
   };
 }
 
+export interface CountersValue {
+  total: number;
+  totalSelected: number;
+  totalSelectedRed: number;
+  totalSelectedGreen: number;
+}
+
 export default class Store {
-  //private boxes: Array<itemValue>;
-  //private boxes: itemValue2
-  public boxes: boxesValue = Object.create(null);
+  boxes: BoxesValue;
 
   constructor() {
-    console.log("Store");
     this.boxes = Object.create(null);
   }
 
-  find() {}
-
-  public update() {
-    console.log("Store update");
-  }
-
-  insert(item: itemValue, callback: () => void) {
-    this.boxes[item.id] = {
-      isComplex: item.isComplex,
-      isSelected: item.isSelected
+  insert(isComplex: boolean, callback: (obj: ItemValue) => void) {
+    const obj: ItemValue = {
+      id: Date.now(),
+      isSelected: false,
+      isComplex: isComplex
     };
-    //console.log(this.boxes);
-    callback && callback();
+    if (isComplex) {
+      obj.state = RED;
+    }
+    this.boxes[obj.id] = obj;
+    callback(obj);
   }
 
   remove(id: string, callback: () => void) {
     delete this.boxes[id];
-    //console.log(this.boxes);
-    callback && callback();
+    callback();
   }
 
   toggleSelect(id: string, callback: () => void) {
     this.boxes[id].isSelected = !this.boxes[id].isSelected;
-    //console.log(this.boxes);
-    callback && callback();
+    callback();
   }
 
-  count() {}
+  switch(id: string, callback: () => void) {
+    const state = this.boxes[id].state;
+    const newState = state === RED ? GREEN : RED;
+    this.boxes[id].state = newState;
+    callback();
+  }
+
+  count(callback: (counters: CountersValue) => void) {
+    let total = 0;
+    let totalSelected = 0;
+    let totalSelectedRed = 0;
+    let totalSelectedGreen = 0;
+
+    for (let key in this.boxes) {
+      total++;
+      const item = this.boxes[key];
+      if (item.isSelected) {
+        totalSelected++;
+
+        if (item.isComplex && item.state === RED) {
+          totalSelectedRed++;
+        }
+
+        if (item.isComplex && item.state === GREEN) {
+          totalSelectedGreen++;
+        }
+      }
+    }
+    callback({ total, totalSelected, totalSelectedRed, totalSelectedGreen });
+  }
 }

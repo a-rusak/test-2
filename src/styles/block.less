@@ -1,17 +1,19 @@
 .c-block {
+  position: relative;
   margin: 0;
   padding: 0.5em;
   flex-basis: 300px;
-  position: relative;
 
   &__text {
     padding: 2em;
     border: 1px solid fade(@brand-primary, 20%);
 
     .c-block--selected & {
-      background-color: @brand-accent;
+      background-color: fade(@brand-accent, 100%);
       border-color: @brand-primary;
-      color: white;
+    }
+    .c-block--complex & {
+      font-weight: bold;
     }
     .c-block:hover & {
       border-color: @brand-primary;
@@ -27,7 +29,17 @@
   &__container {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+    flex-basis: 100%;
     overflow: auto;
+  }
+
+  &--red {
+    background-color: fade(red, 15%);
+  }
+  &--green {
+    background-color: fade(darkgreen, 25%);
   }
 
 }

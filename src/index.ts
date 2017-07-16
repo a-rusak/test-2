@@ -5,7 +5,5 @@ import App from "./app";
 declare const PROD: boolean;
 
 document.addEventListener('DOMContentLoaded', () => {
-  //!PROD && console.log('DOMContentLoaded')
-  !PROD && document.body.classList.add('u-debug')
-  const app = new App({ test: "App" });
+  const app = new App();
 });
