@@ -1,19 +1,19 @@
-import TextBoxController from "./TextBoxController";
+import Controller from "./controller";
 
 interface PropsValue {
     test: string;
 }
+
 export default class App {
   private test: string;
-  private controller: TextBoxController;
+  private controller: Controller;
 
   constructor(propsObj: PropsValue) {
     this.test = propsObj.test;
     console.log(this.test);
-    this.controller = new TextBoxController()
+    this.controller = new Controller()
   }
 }
-
 
 ////
 

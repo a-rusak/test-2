@@ -5,8 +5,9 @@
  * @param {Element} [scope] Optional scope element for the selector
  */
 
-export const $$ = (selector: string, scope = document) =>
-  scope.querySelector(selector);
+export const $$ = (selector: string, scope: Element | HTMLDocument = document) => {
+  return scope.querySelector(selector);
+}
 
 /**
  * addEventListener wrapper

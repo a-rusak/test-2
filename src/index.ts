@@ -1,6 +1,6 @@
 import "./styles/index.less";
 import { $on } from "./helpers";
-import App from "./App";
+import App from "./app";
 
 declare const PROD: boolean;
 
