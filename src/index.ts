@@ -4,6 +4,6 @@ import App from "./app";
 
 declare const PROD: boolean;
 
-document.addEventListener('DOMContentLoaded', () => {
+$on(document, "DOMContentLoaded", () => {
   const app = new App();
 });

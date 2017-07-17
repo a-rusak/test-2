@@ -1,7 +1,7 @@
 import Store from "./Store";
 import { $$, $on } from "./helpers";
 import { CSS } from "./constants";
-import { DELETE, SWITCH, SELECT } from "./constants";
+import { ACTION } from "./constants";
 import { ItemValue, CountersValue } from "./store";
 
 interface DatasetEventTarget extends EventTarget {
@@ -54,32 +54,31 @@ export default class View {
   }
 
   clickHander(
-    callback: (id: string, ACTION: string) => void,
+    callback: (id: string, action: string) => void,
     event: DatasetEvent
   ) {
     const target = event.target;
     const id = target.dataset.id;
-    let ACTION: string = "";
+    let action: string = "";
 
     if (!target || !id) {
       return;
     }
-    //event.cancelBubble = true;
 
     if (target.classList.contains(CSS.block.button)) {
-      ACTION = DELETE;
+      action = ACTION.DELETE;
     }
     if (
       target.classList.contains(CSS.block.name) ||
       target.classList.contains(CSS.block.text)
     ) {
       if (event.type === "dblclick") {
-        ACTION = SWITCH;
+        action = ACTION.SWITCH;
       } else {
-        ACTION = SELECT;
+        action = ACTION.SELECT;
       }
     }
-    callback(id, ACTION);
+    callback(id, action);
   }
 
   toggleSelect(id: string, isSelected: boolean) {

@@ -18,7 +18,7 @@ export const $$ = (selector: string, scope: Element | HTMLDocument = document) =
  * @param {boolean} [capture] Capture the event
  */
 export const $on = (
-  target: Element,
+  target: Element | HTMLDocument,
   type: string,
   callback: () => void,
   capture?: boolean

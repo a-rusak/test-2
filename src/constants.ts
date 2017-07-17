@@ -15,10 +15,10 @@ export const CSS = {
 };
 export const RED: Color = "RED";
 export const GREEN: Color = "GREEN";
-
 export type Color = "RED" | "GREEN";
 
-export const DELETE: Action = "DELETE";
-export const SWITCH: Action = "SWITCH";
-export const SELECT: Action = "SELECT";
-export type Action = "DELETE" | "SWITCH" | "SELECT";
+export enum ACTION {
+  DELETE = "delete",
+  SWITCH = "switch",
+  SELECT = "select"
+}

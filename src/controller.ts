@@ -1,7 +1,7 @@
 import Store from "./Store";
 import View from "./View";
 import { CSS } from "./constants";
-import { DELETE, SWITCH, SELECT } from "./constants";
+import { ACTION } from "./constants";
 import { ItemValue } from "./store";
 
 declare const PROD: boolean;
@@ -33,19 +33,22 @@ export default class Controller {
     this.getCount();
   }
 
-  listClickHandler(id: string, Action: string) {
-    switch (Action) {
-      case DELETE:
-        this.removeItem(id, this.store.boxes[id].isComplex);
+  @checkAction
+  listClickHandler(id: string, action: string) {
+    const isComplex = this.store.boxes[id].isComplex;
+
+    switch (action) {
+      case ACTION.DELETE:
+        this.delete(id, isComplex);
         break;
 
-      case SELECT:
-        this.selectItem(id);
+      case ACTION.SELECT:
+        this.select(id);
         break;
 
-      case SWITCH:
-        if (this.store.boxes[id].isComplex) {
-          this.switchItem(id);
+      case ACTION.SWITCH:
+        if (isComplex) {
+          this.switch(id);
         }
         break;
 
@@ -62,21 +65,21 @@ export default class Controller {
   }
 
   @confirmDelete
-  removeItem(id: string, isComplex: boolean) {
+  delete(id: string, isComplex: boolean) {
     this.store.remove(id, () => {
       this.getCount();
       this.view.remove(id);
     });
   }
 
-  switchItem(id: string) {
+  switch(id: string) {
     this.store.switch(id, () => {
       this.getCount();
       this.view.switch(id);
     });
   }
 
-  selectItem(id: string) {
+  select(id: string) {
     this.store.toggleSelect(id, () => {
       this.getCount();
       this.view.toggleSelect(id, this.store.boxes[id].isSelected);
@@ -100,6 +103,21 @@ function confirmDelete(target: Controller, key: string, value: any) {
       const result = isApproved ? value.value.call(this, id, isComplex) : null;
 
       return result;
+    }
+  };
+}
+
+function checkAction(target: Controller, key: string, value: any) {
+  return {
+    value: function(id: string, action: string) {
+      if (
+        action === ACTION.DELETE ||
+        action === ACTION.SELECT ||
+        action === ACTION.SWITCH
+      ) {
+        return value.value.call(this, id, action);
+      }
+      throw new Error("Wrong action name");
     }
   };
 }
