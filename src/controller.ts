@@ -55,15 +55,6 @@ export default class Controller {
     }
   }
 
-  listDoubleClickHandler(event: DatasetEvent) {
-    const target = event.target;
-    const id = target.dataset.id;
-
-    if (!target || !id || !target.classList.contains(CSS.block.name)) {
-      return;
-    }
-  }
-
   addItem(isComplex: boolean) {
     this.store.insert(isComplex, item => {
       this.getCount();
