@@ -34,7 +34,6 @@ export default class Controller {
     this.getCount();
   }
 
-  //listClickHandler(id: string, ACTION: string) {
   listClickHandler(id: string, Action: string) {
     switch (Action) {
       case DELETE:
