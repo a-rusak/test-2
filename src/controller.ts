@@ -1,6 +1,5 @@
 import Store from "./Store";
 import View from "./View";
-import { $$, $on } from "./helpers";
 import { CSS } from "./constants";
 import { DELETE, SWITCH, SELECT } from "./constants";
 import { ItemValue } from "./store";
