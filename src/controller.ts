@@ -4,21 +4,6 @@ import { CSS } from "./constants";
 import { ACTION } from "./constants";
 import { ItemValue } from "./store";
 
-declare const PROD: boolean;
-
-interface DatasetEventTarget extends EventTarget {
-  dataset: {
-    id: string;
-  };
-  tagName: string;
-  classList: DOMTokenList;
-}
-
-interface DatasetEvent extends Event {
-  target: DatasetEventTarget;
-  getMessage(): string;
-}
-
 export default class Controller {
   private store: Store;
   private view: View;
@@ -26,41 +11,17 @@ export default class Controller {
   constructor() {
     this.store = new Store();
     this.view = new View(this.store);
-    this.view.bindAddItem(this.addItem.bind(this, false));
-    this.view.bindAddComplexItem(this.addItem.bind(this, true));
+    this.view.bindAddItem(this.insert.bind(this, false));
+    this.view.bindAddComplexItem(this.insert.bind(this, true));
     this.view.bindListClickHandler(this.listClickHandler.bind(this));
     this.view.bindListDoubleClickHandler(this.listClickHandler.bind(this));
     this.getCount();
   }
 
-  @checkAction
-  listClickHandler(id: string, action: string) {
-    const isComplex = this.store.boxes[id].isComplex;
-
-    switch (action) {
-      case ACTION.DELETE:
-        this.delete(id, isComplex);
-        break;
-
-      case ACTION.SELECT:
-        this.select(id);
-        break;
-
-      case ACTION.SWITCH:
-        if (isComplex) {
-          this.switch(id);
-        }
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  addItem(isComplex: boolean) {
+  insert(isComplex: boolean) {
     this.store.insert(isComplex, item => {
       this.getCount();
-      this.view.addItem(item);
+      this.view.insert(item);
     });
   }
 
@@ -84,6 +45,30 @@ export default class Controller {
       this.getCount();
       this.view.toggleSelect(id, this.store.boxes[id].isSelected);
     });
+  }
+  
+  @checkAction
+  listClickHandler(id: string, action: string) {
+    const isComplex = this.store.boxes[id].isComplex;
+
+    switch (action) {
+      case ACTION.DELETE:
+        this.delete(id, isComplex);
+        break;
+
+      case ACTION.SELECT:
+        this.select(id);
+        break;
+
+      case ACTION.SWITCH:
+        if (isComplex) {
+          this.switch(id);
+        }
+        break;
+
+      default:
+        break;
+    }
   }
 
   getCount() {

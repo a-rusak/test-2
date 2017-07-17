@@ -8,13 +8,11 @@ interface DatasetEventTarget extends EventTarget {
   dataset: {
     id: string;
   };
-  tagName: string;
   classList: DOMTokenList;
 }
 
 interface DatasetEvent extends Event {
   target: DatasetEventTarget;
-  getMessage(): string;
 }
 
 interface ViewCountersValue {
@@ -44,13 +42,28 @@ export default class View {
     };
   }
 
-  addItem(item: ItemValue) {
+  insert(item: ItemValue) {
     this.$container.appendChild(this.renderBox(item));
   }
 
   remove(id: string) {
     const elem = $$(`figure[data-id="${id}"]`, this.$container);
     this.$container.removeChild(elem);
+  }
+
+  toggleSelect(id: string, isSelected: boolean) {
+    const elem = $$(`figure[data-id="${id}"]`, this.$container);
+    if (elem && elem.classList) {
+      elem.classList.toggle(CSS.block.selected, isSelected);
+    }
+  }
+
+  switch(id: string) {
+    const elem = $$(`figure[data-id="${id}"]`, this.$container);
+    if (elem && elem.classList) {
+      elem.classList.toggle(CSS.block.red);
+      elem.classList.toggle(CSS.block.green);
+    }
   }
 
   clickHander(
@@ -79,21 +92,6 @@ export default class View {
       }
     }
     callback(id, action);
-  }
-
-  toggleSelect(id: string, isSelected: boolean) {
-    const elem = $$(`figure[data-id="${id}"]`, this.$container);
-    if (elem && elem.classList) {
-      elem.classList.toggle(CSS.block.selected, isSelected);
-    }
-  }
-
-  switch(id: string) {
-    const elem = $$(`figure[data-id="${id}"]`, this.$container);
-    if (elem && elem.classList) {
-      elem.classList.toggle(CSS.block.red);
-      elem.classList.toggle(CSS.block.green);
-    }
   }
 
   setCounters(counters: CountersValue) {
